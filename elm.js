@@ -12697,7 +12697,6 @@ Elm.View.make = function (_elm) {
    _L = _N.List.make(_elm),
    $moduleName = "View",
    $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
@@ -12717,6 +12716,23 @@ Elm.View.make = function (_elm) {
                              _L.fromArray([$Html$Attributes.type$("checkbox")]),
                              _L.fromArray([]))
                              ,$Html.text("Only show products in stock")]))]));
+   var productRow = function (row) {
+      return function () {
+         var stockStyle = row.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                             ,_0: "color"
+                                                                             ,_1: "black"}])) : $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                                                                                     ,_0: "color"
+                                                                                                                                     ,_1: "red"}]));
+         return A2($Html.tr,
+         _L.fromArray([]),
+         _L.fromArray([A2($Html.td,
+                      _L.fromArray([stockStyle]),
+                      _L.fromArray([$Html.text(row.name)]))
+                      ,A2($Html.td,
+                      _L.fromArray([]),
+                      _L.fromArray([$Html.text(row.price)]))]));
+      }();
+   };
    var productTable = function (model) {
       return A2($Html.table,
       _L.fromArray([]),
@@ -12732,7 +12748,9 @@ Elm.View.make = function (_elm) {
                                 _L.fromArray([$Html.text("Price")]))]))]))
                    ,A2($Html.tbody,
                    _L.fromArray([]),
-                   _L.fromArray([$Html.text("Table Body")]))]));
+                   A2($List.map,
+                   productRow,
+                   model))]));
    };
    var filterableProductTable = function (model) {
       return A2($Html.div,
@@ -12744,9 +12762,6 @@ Elm.View.make = function (_elm) {
       return filterableProductTable(model);
    };
    var main = view($Model.initialModel);
-   var productRow = function (row) {
-      return $Debug.crash("productRow: not implemented yet");
-   };
    var productCategoryRow = function (category) {
       return A2($Html.tr,
       _L.fromArray([]),

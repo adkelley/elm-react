@@ -16,14 +16,29 @@ productCategoryRow category =
 
 productRow : ProductRow -> Html
 productRow row =
-  Debug.crash ( "productRow: not implemented yet" )
+  let stockedStyle =
+        if row.stocked
+        then style [ ( "color", "black" ) ]
+        else style [ ( "color", "red" ) ]
+  in
+    tr
+    [ ]
+    [ td [ stockedStyle ] [ text row.name ]
+    , td [ ] [ text row.price ]
+    ]
 
+{- 
+productOrCatagory : ProductRow -> Html
+productOrCatagory lastcatagory row =
+  if row.
+-}
 
+                    
 productTable : Model -> Html
 productTable model =
   table
     [ ]
-    [ thead
+    [ thead 
         [ ]
         [ tr
           [ ]
@@ -33,7 +48,7 @@ productTable model =
         ]
     , tbody
       [ ]
-      [ text "Table Body" ]
+      ( List.map productRow model  )
     ]
   
 
