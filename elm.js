@@ -4136,59 +4136,59 @@ Elm.Model.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
-   var newProductRow = F4(function (catagory,
+   var newProduct = F4(function (category,
    price,
    stocked,
    name) {
       return {_: {}
-             ,catagory: catagory
+             ,category: category
              ,name: name
              ,price: price
              ,stocked: stocked};
    });
-   var initialModel = _L.fromArray([A4(newProductRow,
+   var initialModel = _L.fromArray([A4(newProduct,
                                    "Sporting Goods",
                                    "$49.99",
                                    true,
                                    "Football")
-                                   ,A4(newProductRow,
+                                   ,A4(newProduct,
                                    "Sporting Goods",
                                    "$9.99",
                                    true,
                                    "Baseball")
-                                   ,A4(newProductRow,
+                                   ,A4(newProduct,
                                    "Sporting Goods",
                                    "$29.99",
                                    false,
                                    "Basketball")
-                                   ,A4(newProductRow,
+                                   ,A4(newProduct,
                                    "Electronics",
                                    "$99.99",
                                    true,
                                    "iPod Touch")
-                                   ,A4(newProductRow,
+                                   ,A4(newProduct,
                                    "Electronics",
                                    "$399.99",
                                    false,
                                    "iPhone 5")
-                                   ,A4(newProductRow,
+                                   ,A4(newProduct,
                                    "Electronics",
                                    "$199.99",
                                    true,
                                    "Nexus 7")]);
-   var ProductRow = F4(function (a,
+   var Product = F4(function (a,
    b,
    c,
    d) {
       return {_: {}
-             ,catagory: a
+             ,category: a
              ,name: d
              ,price: b
              ,stocked: c};
    });
    _elm.Model.values = {_op: _op
-                       ,ProductRow: ProductRow
-                       ,newProductRow: newProductRow
+                       ,Product: Product
+                       ,newProduct: newProduct
                        ,initialModel: initialModel};
    return _elm.Model.values;
 };
@@ -12716,41 +12716,73 @@ Elm.View.make = function (_elm) {
                              _L.fromArray([$Html$Attributes.type$("checkbox")]),
                              _L.fromArray([]))
                              ,$Html.text("Only show products in stock")]))]));
-   var productRow = function (row) {
+   var productRow = function (product) {
       return function () {
-         var stockStyle = row.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                                             ,_0: "color"
-                                                                             ,_1: "black"}])) : $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                                                                                                     ,_0: "color"
-                                                                                                                                     ,_1: "red"}]));
+         var stockedStyle = product.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                                   ,_0: "color"
+                                                                                   ,_1: "black"}])) : $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                                                                                           ,_0: "color"
+                                                                                                                                           ,_1: "red"}]));
          return A2($Html.tr,
          _L.fromArray([]),
          _L.fromArray([A2($Html.td,
-                      _L.fromArray([stockStyle]),
-                      _L.fromArray([$Html.text(row.name)]))
+                      _L.fromArray([stockedStyle]),
+                      _L.fromArray([$Html.text(product.name)]))
                       ,A2($Html.td,
                       _L.fromArray([]),
-                      _L.fromArray([$Html.text(row.price)]))]));
+                      _L.fromArray([$Html.text(product.price)]))]));
       }();
    };
-   var productTable = function (model) {
-      return A2($Html.table,
+   var productCategoryRow = function (category) {
+      return A2($Html.tr,
       _L.fromArray([]),
-      _L.fromArray([A2($Html.thead,
-                   _L.fromArray([]),
-                   _L.fromArray([A2($Html.tr,
-                   _L.fromArray([]),
-                   _L.fromArray([A2($Html.th,
-                                _L.fromArray([]),
-                                _L.fromArray([$Html.text("Name")]))
-                                ,A2($Html.th,
-                                _L.fromArray([]),
-                                _L.fromArray([$Html.text("Price")]))]))]))
-                   ,A2($Html.tbody,
-                   _L.fromArray([]),
-                   A2($List.map,
-                   productRow,
-                   model))]));
+      _L.fromArray([A2($Html.th,
+      _L.fromArray([$Html$Attributes.colspan(2)]),
+      _L.fromArray([$Html.text(category)]))]));
+   };
+   var productTable = function (model) {
+      return function () {
+         var rows = F3(function (lastCategory,
+         model$,
+         components) {
+            return function () {
+               var _v0 = $List.head(model$);
+               switch (_v0.ctor)
+               {case "Just":
+                  return !_U.eq(_v0._0.category,
+                    lastCategory) ? A3(rows,
+                    _v0._0.category,
+                    model$,
+                    A2($List._op["::"],
+                    productCategoryRow(_v0._0.category),
+                    components)) : A3(rows,
+                    _v0._0.category,
+                    A2($List.drop,1,model$),
+                    A2($List._op["::"],
+                    productRow(_v0._0),
+                    components));}
+               return $List.reverse(components);
+            }();
+         });
+         return A2($Html.table,
+         _L.fromArray([]),
+         _L.fromArray([A2($Html.thead,
+                      _L.fromArray([]),
+                      _L.fromArray([A2($Html.tr,
+                      _L.fromArray([]),
+                      _L.fromArray([A2($Html.th,
+                                   _L.fromArray([]),
+                                   _L.fromArray([$Html.text("Name")]))
+                                   ,A2($Html.th,
+                                   _L.fromArray([]),
+                                   _L.fromArray([$Html.text("Price")]))]))]))
+                      ,A2($Html.tbody,
+                      _L.fromArray([]),
+                      A3(rows,
+                      "",
+                      model,
+                      _L.fromArray([])))]));
+      }();
    };
    var filterableProductTable = function (model) {
       return A2($Html.div,
@@ -12762,13 +12794,6 @@ Elm.View.make = function (_elm) {
       return filterableProductTable(model);
    };
    var main = view($Model.initialModel);
-   var productCategoryRow = function (category) {
-      return A2($Html.tr,
-      _L.fromArray([]),
-      _L.fromArray([A2($Html.th,
-      _L.fromArray([$Html$Attributes.colspan(2)]),
-      _L.fromArray([$Html.text(category)]))]));
-   };
    _elm.View.values = {_op: _op
                       ,productCategoryRow: productCategoryRow
                       ,productRow: productRow

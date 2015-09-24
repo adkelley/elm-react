@@ -1,19 +1,19 @@
 module Model where
 
-type alias ProductRow =
-  { catagory : String
+type alias Product =
+  { category : String
   , price : String
   , stocked : Bool
   , name : String
   }
                  
-type alias ProductRows = List ProductRow
+type alias Products = List Product
 
-type alias Model = ProductRows
+type alias Model = Products
 
-newProductRow : String -> String -> Bool -> String -> ProductRow
-newProductRow catagory price stocked name =
-  { catagory = catagory
+newProduct : String -> String -> Bool -> String -> Product
+newProduct category price stocked name =
+  { category = category
   , price = price
   , stocked = stocked
   , name = name
@@ -21,11 +21,11 @@ newProductRow catagory price stocked name =
 
 initialModel : Model
 initialModel =
-  [ newProductRow "Sporting Goods" "$49.99"  True  "Football"
-  , newProductRow "Sporting Goods" "$9.99"   True  "Baseball"
-  , newProductRow "Sporting Goods" "$29.99"  False "Basketball"
-  , newProductRow "Electronics"    "$99.99"  True  "iPod Touch"
-  , newProductRow "Electronics"    "$399.99" False "iPhone 5"
-  , newProductRow "Electronics"    "$199.99" True  "Nexus 7"
+  [ newProduct "Sporting Goods" "$49.99"  True  "Football"
+  , newProduct "Sporting Goods" "$9.99"   True  "Baseball"
+  , newProduct "Sporting Goods" "$29.99"  False "Basketball"
+  , newProduct "Electronics"    "$99.99"  True  "iPod Touch"
+  , newProduct "Electronics"    "$399.99" False "iPhone 5"
+  , newProduct "Electronics"    "$199.99" True  "Nexus 7"
   ]
 
