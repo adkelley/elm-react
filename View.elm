@@ -76,13 +76,10 @@ productTable products state =
           if product.category /= lastCategory
           then rows product.category products'  ( ( productCategoryRow product.category ) :: components  )
           else
-            if state.inStockOnly
-            then
-              if product.stocked
-              then rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
-              else rows product.category ( List.drop 1 products' ) components
-            else
-              rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
+            if state.inStockOnly && ( not product.stocked )
+            then rows product.category ( List.drop 1 products' ) components
+            else rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
+
         otherwise ->
           List.reverse components
   in
