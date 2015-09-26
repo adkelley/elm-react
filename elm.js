@@ -12740,24 +12740,24 @@ Elm.View.make = function (_elm) {
       _L.fromArray([$Html$Attributes.colspan(2)]),
       _L.fromArray([$Html.text(category)]))]));
    };
-   var productTable = function (model) {
+   var productTable = function (products) {
       return function () {
          var rows = F3(function (lastCategory,
-         model$,
+         products$,
          components) {
             return function () {
-               var _v0 = $List.head(model$);
+               var _v0 = $List.head(products$);
                switch (_v0.ctor)
                {case "Just":
                   return !_U.eq(_v0._0.category,
                     lastCategory) ? A3(rows,
                     _v0._0.category,
-                    model$,
+                    products$,
                     A2($List._op["::"],
                     productCategoryRow(_v0._0.category),
                     components)) : A3(rows,
                     _v0._0.category,
-                    A2($List.drop,1,model$),
+                    A2($List.drop,1,products$),
                     A2($List._op["::"],
                     productRow(_v0._0),
                     components));}
@@ -12780,18 +12780,18 @@ Elm.View.make = function (_elm) {
                       _L.fromArray([]),
                       A3(rows,
                       "",
-                      model,
+                      products,
                       _L.fromArray([])))]));
       }();
    };
-   var filterableProductTable = function (model) {
+   var filterableProductTable = function (products) {
       return A2($Html.div,
       _L.fromArray([$Html$Attributes.$class("FilterableProductTable")]),
       _L.fromArray([searchBar
-                   ,productTable(model)]));
+                   ,productTable(products)]));
    };
-   var view = function (model) {
-      return filterableProductTable(model);
+   var view = function (products) {
+      return filterableProductTable(products);
    };
    var main = view($Model.initialModel);
    _elm.View.values = {_op: _op

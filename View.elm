@@ -1,11 +1,49 @@
 module View where
 
-import Model exposing ( Model, initialModel, Product )
-import Graphics.Element exposing ( show, Element )
+import Model exposing ( Products, Product, model)
 import Html exposing ( .. )
 import Html.Attributes exposing ( .. )
-import Debug exposing ( .. )
+import Html.Events exposing ( on, targetChecked )
+import Signal exposing ( Address, Mailbox )
+import Debug expsoing ( log )
 
+
+-- STATE
+
+type alias State =
+  {
+    inStockOnly : Bool
+    filterText : String
+  }
+
+initialState : State
+initialState =
+  { inStockOnly = False
+  , filterText = ""
+  }
+
+
+-- UPDATE
+
+type Action
+  = FilterText String
+  | InStockOnly Bool
+  | NoOp
+
+
+update Action -> State -> State
+update action state =
+  case action of
+    NoOp ->
+      state
+
+    InStockOnly bool ->
+      { state |  inStockOnly <- bool }
+      
+    FilterText ->
+      state
+  
+-- VIEW
 
 productCategoryRow : String -> Html
 productCategoryRow category =
@@ -31,16 +69,20 @@ productRow product =
  
 type alias Components = List Html
 
-productTable : Model -> Html
-productTable model =
+productTable : Products -> State -> Html
+productTable products state =
   let
-    rows : String -> Model -> Components -> Components
-    rows lastCategory model' components =
-      case List.head model' of
+    rows : String -> Products -> Components -> Components
+    rows lastCategory products' components =
+      case List.head products' of
         Just product ->
           if product.category /= lastCategory
-          then rows product.category model'  ( ( productCategoryRow product.category ) :: components  )
-          else rows product.category ( List.drop 1 model' ) ( ( productRow product ) :: components )
+          then rows product.category products'  ( ( productCategoryRow product.category ) :: components  )
+          else
+            if state.inStockOnly
+            then
+              if 
+            rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
         otherwise ->
           List.reverse components
   in
@@ -56,38 +98,53 @@ productTable model =
       ]
     , tbody
       [ ]
-      ( rows "" model [ ] )
-  ]
+      ( rows "" products [ ] )
+    ]
 
 
 
-searchBar : Html
-searchBar =
+searchBar : Signal.Address Action -> State -> Html
+searchBar address state =
   Html.form 
     [ ]
     [ input [ type' "text", placeholder "Search ..." ] [ ]
     , p
       [ ]
-      [ input [ type' "checkbox" ] [ ]
+      [ input
+        [ type' "checkbox"
+        , checked state.inStockOnly
+        , on "change" targetChecked ( Signal.message address << InStockOnly )
+        ]
+        [ ]
       , text "Only show products in stock"
       ]
     ]
 
 
-filterableProductTable : Model -> Html
-filterableProductTable model =
+filterableProductTable : Signal.Address Action -> Products -> State -> Html
+filterableProductTable address products state =
   div
-   [ class "FilterableProductTable" ]
-   [ searchBar
-   , productTable model
-   ]
+  [ class "FilterableProductTable" ]
+  [ searchBar address state
+  , productTable address products state
+  ]
 
 
-view : Model -> Html
-view model =
-    filterableProductTable model
+-- SIGNALS
+inbox : Signal.Mailbox Action
+inbox =
+  Signal.mailbox NoOp
+
+actions : Signal Action
+actions =
+  inbox.signal 
+
+state : Signal State
+state =
+  Signal.foldp update initialState actions
 
 
-main : Html
+main : Signal Html
 main =
-  view initialModel
+  Signal.map (filterableProductTable inbox.address model) state
+

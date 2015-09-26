@@ -9,8 +9,6 @@ type alias Product =
                  
 type alias Products = List Product
 
-type alias Model = Products
-
 newProduct : String -> String -> Bool -> String -> Product
 newProduct category price stocked name =
   { category = category
@@ -19,7 +17,7 @@ newProduct category price stocked name =
   , name = name
   }
 
-initialModel : Model
+initialModel : Products
 initialModel =
   [ newProduct "Sporting Goods" "$49.99"  True  "Football"
   , newProduct "Sporting Goods" "$9.99"   True  "Baseball"
