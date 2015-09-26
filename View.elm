@@ -3,8 +3,9 @@ module View where
 import Model exposing ( Products, Product, model)
 import Html exposing ( .. )
 import Html.Attributes exposing ( .. )
-import Html.Events exposing ( on, targetChecked )
+import Html.Events exposing ( on, targetChecked, targetValue )
 import Signal exposing ( Address, Mailbox )
+import String exposing ( contains )
 
 -- STATE
 
@@ -38,7 +39,7 @@ update action state =
       { state |  inStockOnly <- bool }
       
     FilterText string ->
-      state
+      { state | filterText <- string }
   
 -- VIEW
 
@@ -46,7 +47,7 @@ productCategoryRow : String -> Html
 productCategoryRow category =
   tr
     [ ]
-    [ th [ colspan 2 ] [ text category ] ]
+    [ th [ align "left", colspan 2 ] [ text category ] ]
 
 
 
@@ -76,7 +77,7 @@ productTable products state =
           if product.category /= lastCategory
           then rows product.category products'  ( ( productCategoryRow product.category ) :: components  )
           else
-            if state.inStockOnly && ( not product.stocked )
+            if ( not <| String.contains state.filterText product.name ) || ( state.inStockOnly && ( not product.stocked ) )
             then rows product.category ( List.drop 1 products' ) components
             else rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
 
@@ -89,8 +90,8 @@ productTable products state =
       [ ]
       [ tr
         [ ]
-        [ th [ ] [ text "Name" ]
-        , th [ ] [ text "Price" ]
+        [ th [ align "left"] [ text "Name" ]
+        , th [ align "left"] [ text "Price" ]
         ]
       ]
     , tbody
@@ -104,7 +105,13 @@ searchBar : Signal.Address Action -> State -> Html
 searchBar address state =
   Html.form 
     [ ]
-    [ input [ type' "text", placeholder "Search ..." ] [ ]
+    [ input
+      [ type' "text"
+      , value state.filterText
+      , on "input" targetValue ( Signal.message address << FilterText )
+      , placeholder "Search ..."
+      ]
+      [ ]
     , p
       [ ]
       [ input

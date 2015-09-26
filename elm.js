@@ -12811,7 +12811,8 @@ Elm.View.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var productRow = function (product) {
       return function () {
          var stockedStyle = product.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
@@ -12833,7 +12834,8 @@ Elm.View.make = function (_elm) {
       return A2($Html.tr,
       _L.fromArray([]),
       _L.fromArray([A2($Html.th,
-      _L.fromArray([$Html$Attributes.colspan(2)]),
+      _L.fromArray([$Html$Attributes.align("left")
+                   ,$Html$Attributes.colspan(2)]),
       _L.fromArray([$Html.text(category)]))]));
    };
    var productTable = F2(function (products,
@@ -12852,7 +12854,9 @@ Elm.View.make = function (_elm) {
                     products$,
                     A2($List._op["::"],
                     productCategoryRow(_v0._0.category),
-                    components)) : state.inStockOnly && $Basics.not(_v0._0.stocked) ? A3(rows,
+                    components)) : $Basics.not(A2($String.contains,
+                    state.filterText,
+                    _v0._0.name)) || state.inStockOnly && $Basics.not(_v0._0.stocked) ? A3(rows,
                     _v0._0.category,
                     A2($List.drop,1,products$),
                     components) : A3(rows,
@@ -12871,10 +12875,10 @@ Elm.View.make = function (_elm) {
                       _L.fromArray([A2($Html.tr,
                       _L.fromArray([]),
                       _L.fromArray([A2($Html.th,
-                                   _L.fromArray([]),
+                                   _L.fromArray([$Html$Attributes.align("left")]),
                                    _L.fromArray([$Html.text("Name")]))
                                    ,A2($Html.th,
-                                   _L.fromArray([]),
+                                   _L.fromArray([$Html$Attributes.align("left")]),
                                    _L.fromArray([$Html.text("Price")]))]))]))
                       ,A2($Html.tbody,
                       _L.fromArray([]),
@@ -12889,14 +12893,16 @@ Elm.View.make = function (_elm) {
       return function () {
          switch (action.ctor)
          {case "FilterText":
-            return state;
+            return _U.replace([["filterText"
+                               ,action._0]],
+              state);
             case "InStockOnly":
             return _U.replace([["inStockOnly"
                                ,action._0]],
               state);
             case "NoOp": return state;}
          _U.badCase($moduleName,
-         "between lines 33 and 42");
+         "between lines 34 and 43");
       }();
    });
    var NoOp = {ctor: "NoOp"};
@@ -12906,12 +12912,23 @@ Elm.View.make = function (_elm) {
       return {ctor: "InStockOnly"
              ,_0: a};
    };
+   var FilterText = function (a) {
+      return {ctor: "FilterText"
+             ,_0: a};
+   };
    var searchBar = F2(function (address,
    state) {
       return A2($Html.form,
       _L.fromArray([]),
       _L.fromArray([A2($Html.input,
                    _L.fromArray([$Html$Attributes.type$("text")
+                                ,$Html$Attributes.value(state.filterText)
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                function ($) {
+                                   return $Signal.message(address)(FilterText($));
+                                })
                                 ,$Html$Attributes.placeholder("Search ...")]),
                    _L.fromArray([]))
                    ,A2($Html.p,
@@ -12940,10 +12957,6 @@ Elm.View.make = function (_elm) {
                    products,
                    state)]));
    });
-   var FilterText = function (a) {
-      return {ctor: "FilterText"
-             ,_0: a};
-   };
    var initialState = {_: {}
                       ,filterText: ""
                       ,inStockOnly: false};
