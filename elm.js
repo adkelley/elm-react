@@ -3544,6 +3544,113 @@ Elm.Html.Attributes.make = function (_elm) {
                                  ,attribute: attribute};
    return _elm.Html.Attributes.values;
 };
+Elm.Html = Elm.Html || {};
+Elm.Html.Events = Elm.Html.Events || {};
+Elm.Html.Events.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Events = _elm.Html.Events || {};
+   if (_elm.Html.Events.values)
+   return _elm.Html.Events.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Events",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var keyCode = A2($Json$Decode._op[":="],
+   "keyCode",
+   $Json$Decode.$int);
+   var targetChecked = A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"checked"]),
+   $Json$Decode.bool);
+   var targetValue = A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"value"]),
+   $Json$Decode.string);
+   var defaultOptions = $VirtualDom.defaultOptions;
+   var Options = F2(function (a,
+   b) {
+      return {_: {}
+             ,preventDefault: b
+             ,stopPropagation: a};
+   });
+   var onWithOptions = $VirtualDom.onWithOptions;
+   var on = $VirtualDom.on;
+   var messageOn = F3(function (name,
+   addr,
+   msg) {
+      return A3(on,
+      name,
+      $Json$Decode.value,
+      function (_v0) {
+         return function () {
+            return A2($Signal.message,
+            addr,
+            msg);
+         }();
+      });
+   });
+   var onClick = messageOn("click");
+   var onDoubleClick = messageOn("dblclick");
+   var onMouseMove = messageOn("mousemove");
+   var onMouseDown = messageOn("mousedown");
+   var onMouseUp = messageOn("mouseup");
+   var onMouseEnter = messageOn("mouseenter");
+   var onMouseLeave = messageOn("mouseleave");
+   var onMouseOver = messageOn("mouseover");
+   var onMouseOut = messageOn("mouseout");
+   var onBlur = messageOn("blur");
+   var onFocus = messageOn("focus");
+   var onSubmit = messageOn("submit");
+   var onKey = F3(function (name,
+   addr,
+   handler) {
+      return A3(on,
+      name,
+      keyCode,
+      function (code) {
+         return A2($Signal.message,
+         addr,
+         handler(code));
+      });
+   });
+   var onKeyUp = onKey("keyup");
+   var onKeyDown = onKey("keydown");
+   var onKeyPress = onKey("keypress");
+   _elm.Html.Events.values = {_op: _op
+                             ,onBlur: onBlur
+                             ,onFocus: onFocus
+                             ,onSubmit: onSubmit
+                             ,onKeyUp: onKeyUp
+                             ,onKeyDown: onKeyDown
+                             ,onKeyPress: onKeyPress
+                             ,onClick: onClick
+                             ,onDoubleClick: onDoubleClick
+                             ,onMouseMove: onMouseMove
+                             ,onMouseDown: onMouseDown
+                             ,onMouseUp: onMouseUp
+                             ,onMouseEnter: onMouseEnter
+                             ,onMouseLeave: onMouseLeave
+                             ,onMouseOver: onMouseOver
+                             ,onMouseOut: onMouseOut
+                             ,on: on
+                             ,onWithOptions: onWithOptions
+                             ,defaultOptions: defaultOptions
+                             ,targetValue: targetValue
+                             ,targetChecked: targetChecked
+                             ,keyCode: keyCode
+                             ,Options: Options};
+   return _elm.Html.Events.values;
+};
 Elm.Json = Elm.Json || {};
 Elm.Json.Decode = Elm.Json.Decode || {};
 Elm.Json.Decode.make = function (_elm) {
@@ -4146,36 +4253,36 @@ Elm.Model.make = function (_elm) {
              ,price: price
              ,stocked: stocked};
    });
-   var initialModel = _L.fromArray([A4(newProduct,
-                                   "Sporting Goods",
-                                   "$49.99",
-                                   true,
-                                   "Football")
-                                   ,A4(newProduct,
-                                   "Sporting Goods",
-                                   "$9.99",
-                                   true,
-                                   "Baseball")
-                                   ,A4(newProduct,
-                                   "Sporting Goods",
-                                   "$29.99",
-                                   false,
-                                   "Basketball")
-                                   ,A4(newProduct,
-                                   "Electronics",
-                                   "$99.99",
-                                   true,
-                                   "iPod Touch")
-                                   ,A4(newProduct,
-                                   "Electronics",
-                                   "$399.99",
-                                   false,
-                                   "iPhone 5")
-                                   ,A4(newProduct,
-                                   "Electronics",
-                                   "$199.99",
-                                   true,
-                                   "Nexus 7")]);
+   var model = _L.fromArray([A4(newProduct,
+                            "Sporting Goods",
+                            "$49.99",
+                            true,
+                            "Football")
+                            ,A4(newProduct,
+                            "Sporting Goods",
+                            "$9.99",
+                            true,
+                            "Baseball")
+                            ,A4(newProduct,
+                            "Sporting Goods",
+                            "$29.99",
+                            false,
+                            "Basketball")
+                            ,A4(newProduct,
+                            "Electronics",
+                            "$99.99",
+                            true,
+                            "iPod Touch")
+                            ,A4(newProduct,
+                            "Electronics",
+                            "$399.99",
+                            false,
+                            "iPhone 5")
+                            ,A4(newProduct,
+                            "Electronics",
+                            "$199.99",
+                            true,
+                            "Nexus 7")]);
    var Product = F4(function (a,
    b,
    c,
@@ -4189,7 +4296,7 @@ Elm.Model.make = function (_elm) {
    _elm.Model.values = {_op: _op
                        ,Product: Product
                        ,newProduct: newProduct
-                       ,initialModel: initialModel};
+                       ,model: model};
    return _elm.Model.values;
 };
 Elm.Native.Array = {};
@@ -12699,23 +12806,12 @@ Elm.View.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
-   var searchBar = A2($Html.form,
-   _L.fromArray([]),
-   _L.fromArray([A2($Html.input,
-                _L.fromArray([$Html$Attributes.type$("text")
-                             ,$Html$Attributes.placeholder("Search ...")]),
-                _L.fromArray([]))
-                ,A2($Html.p,
-                _L.fromArray([]),
-                _L.fromArray([A2($Html.input,
-                             _L.fromArray([$Html$Attributes.type$("checkbox")]),
-                             _L.fromArray([]))
-                             ,$Html.text("Only show products in stock")]))]));
    var productRow = function (product) {
       return function () {
          var stockedStyle = product.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
@@ -12740,7 +12836,8 @@ Elm.View.make = function (_elm) {
       _L.fromArray([$Html$Attributes.colspan(2)]),
       _L.fromArray([$Html.text(category)]))]));
    };
-   var productTable = function (products) {
+   var productTable = F2(function (products,
+   state) {
       return function () {
          var rows = F3(function (lastCategory,
          products$,
@@ -12755,7 +12852,15 @@ Elm.View.make = function (_elm) {
                     products$,
                     A2($List._op["::"],
                     productCategoryRow(_v0._0.category),
+                    components)) : state.inStockOnly ? _v0._0.stocked ? A3(rows,
+                    _v0._0.category,
+                    A2($List.drop,1,products$),
+                    A2($List._op["::"],
+                    productRow(_v0._0),
                     components)) : A3(rows,
+                    _v0._0.category,
+                    A2($List.drop,1,products$),
+                    components) : A3(rows,
                     _v0._0.category,
                     A2($List.drop,1,products$),
                     A2($List._op["::"],
@@ -12783,24 +12888,99 @@ Elm.View.make = function (_elm) {
                       products,
                       _L.fromArray([])))]));
       }();
+   });
+   var update = F2(function (action,
+   state) {
+      return function () {
+         switch (action.ctor)
+         {case "FilterText":
+            return state;
+            case "InStockOnly":
+            return _U.replace([["inStockOnly"
+                               ,action._0]],
+              state);
+            case "NoOp": return state;}
+         _U.badCase($moduleName,
+         "between lines 33 and 42");
+      }();
+   });
+   var NoOp = {ctor: "NoOp"};
+   var inbox = $Signal.mailbox(NoOp);
+   var actions = inbox.signal;
+   var InStockOnly = function (a) {
+      return {ctor: "InStockOnly"
+             ,_0: a};
    };
-   var filterableProductTable = function (products) {
+   var searchBar = F2(function (address,
+   state) {
+      return A2($Html.form,
+      _L.fromArray([]),
+      _L.fromArray([A2($Html.input,
+                   _L.fromArray([$Html$Attributes.type$("text")
+                                ,$Html$Attributes.placeholder("Search ...")]),
+                   _L.fromArray([]))
+                   ,A2($Html.p,
+                   _L.fromArray([]),
+                   _L.fromArray([A2($Html.input,
+                                _L.fromArray([$Html$Attributes.type$("checkbox")
+                                             ,$Html$Attributes.checked(state.inStockOnly)
+                                             ,A3($Html$Events.on,
+                                             "change",
+                                             $Html$Events.targetChecked,
+                                             function ($) {
+                                                return $Signal.message(address)(InStockOnly($));
+                                             })]),
+                                _L.fromArray([]))
+                                ,$Html.text("Only show products in stock")]))]));
+   });
+   var filterableProductTable = F3(function (address,
+   products,
+   state) {
       return A2($Html.div,
       _L.fromArray([$Html$Attributes.$class("FilterableProductTable")]),
-      _L.fromArray([searchBar
-                   ,productTable(products)]));
+      _L.fromArray([A2(searchBar,
+                   address,
+                   state)
+                   ,A2(productTable,
+                   products,
+                   state)]));
+   });
+   var FilterText = function (a) {
+      return {ctor: "FilterText"
+             ,_0: a};
    };
-   var view = function (products) {
-      return filterableProductTable(products);
-   };
-   var main = view($Model.initialModel);
+   var initialState = {_: {}
+                      ,filterText: ""
+                      ,inStockOnly: false};
+   var state = A3($Signal.foldp,
+   update,
+   initialState,
+   actions);
+   var main = A2($Signal.map,
+   A2(filterableProductTable,
+   inbox.address,
+   $Model.model),
+   state);
+   var State = F2(function (a,b) {
+      return {_: {}
+             ,filterText: b
+             ,inStockOnly: a};
+   });
    _elm.View.values = {_op: _op
+                      ,State: State
+                      ,initialState: initialState
+                      ,FilterText: FilterText
+                      ,InStockOnly: InStockOnly
+                      ,NoOp: NoOp
+                      ,update: update
                       ,productCategoryRow: productCategoryRow
                       ,productRow: productRow
                       ,productTable: productTable
                       ,searchBar: searchBar
                       ,filterableProductTable: filterableProductTable
-                      ,view: view
+                      ,inbox: inbox
+                      ,actions: actions
+                      ,state: state
                       ,main: main};
    return _elm.View.values;
 };

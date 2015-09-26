@@ -5,15 +5,12 @@ import Html exposing ( .. )
 import Html.Attributes exposing ( .. )
 import Html.Events exposing ( on, targetChecked )
 import Signal exposing ( Address, Mailbox )
-import Debug expsoing ( log )
-
 
 -- STATE
 
 type alias State =
-  {
-    inStockOnly : Bool
-    filterText : String
+  { inStockOnly : Bool
+  , filterText : String
   }
 
 initialState : State
@@ -31,7 +28,7 @@ type Action
   | NoOp
 
 
-update Action -> State -> State
+update : Action -> State -> State
 update action state =
   case action of
     NoOp ->
@@ -40,7 +37,7 @@ update action state =
     InStockOnly bool ->
       { state |  inStockOnly <- bool }
       
-    FilterText ->
+    FilterText string ->
       state
   
 -- VIEW
@@ -81,8 +78,11 @@ productTable products state =
           else
             if state.inStockOnly
             then
-              if 
-            rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
+              if product.stocked
+              then rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
+              else rows product.category ( List.drop 1 products' ) components
+            else
+              rows product.category ( List.drop 1 products' ) ( ( productRow product ) :: components )
         otherwise ->
           List.reverse components
   in
@@ -126,18 +126,21 @@ filterableProductTable address products state =
   div
   [ class "FilterableProductTable" ]
   [ searchBar address state
-  , productTable address products state
+  , productTable products state
   ]
 
 
 -- SIGNALS
+
 inbox : Signal.Mailbox Action
 inbox =
   Signal.mailbox NoOp
 
+
 actions : Signal Action
 actions =
   inbox.signal 
+
 
 state : Signal State
 state =

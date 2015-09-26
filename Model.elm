@@ -17,8 +17,8 @@ newProduct category price stocked name =
   , name = name
   }
 
-initialModel : Products
-initialModel =
+model : Products
+model =
   [ newProduct "Sporting Goods" "$49.99"  True  "Football"
   , newProduct "Sporting Goods" "$9.99"   True  "Baseball"
   , newProduct "Sporting Goods" "$29.99"  False "Basketball"
