@@ -1,12 +1,26 @@
-# Draft Blog Post
+# Tutorial: Thinking in Elm is similar to thinking in React
 
-## Thinking in React, implementing in Elm
-I'm going to take you through my thought process of creating a searchable product data table in Elm. The inspiration for this example came from
-some discussion on the Elm Groups forum xx in which a poster was attempting to go from React to Elm.
-React using JSX and Javascript was described in Pete Hunt's seminal [blog post](https://facebook.github.io/react/docs/thinking-in-react.html).
-But instead of React, I'm using Elm while adhering to the same variable and components names from Pete's original blog post.
-My goal is to help others learn how to deconstruct patterns in React and convert them to pure functional patterns in Elm. I suggest you
-first implement the data table in React, because it will help you to clearly understand how to translate a pattern from React into Elm.
+I'm going to take you through my process of creating a searchable product data table in Elm. My inspiration for this tutorial came from
+Pete Hunt's seminal blog post ['Thinking in React'](https://facebook.github.io/react/docs/thinking-in-react.html). In his post, he shows how the React
+framework makes you think about apps as you build them, and I believe the [Elm language](http://elm-lang.org/) shares this same characteristic.
+The end result is that both quietly guide you towards well architected code, but I believe Elm can take you there more easily.
+
+Besides helping you to write well architected code, there are further commonalities between React and Elm - 1) Like React Elm is intended to help developers build applications that use data that changes over time;  2) Data and state flow in one direction, from the parent down to the child componenents. 3) React and Elm both maintain a virtual DOM of their own, making them render super fast.
+
+But naturally, Elm is also very different than React.  Besides writing in a different language than Javascript and JSX, Elm is purely
+functional and therefore you must think and implement functionally in order to implement a UI. This isn't hard, especially if you haven't spent
+a lot of time writing imperative code.  While React espouses functional style programming, after all its Javascript and therefore its easy
+to mutate state if you're not careful or purposely decide to.
+
+In the sections below, I've purposely followed the same outline as Pete Hunt's original [blog post](https://facebook.github.io/react/docs/thinking-in-react.html).  In my code examples, I've also purposely used the same names for the components, props, and state. Hopefully this should help to
+comphrehend the similarities and differences. So make sure you have a good read through and understanding of Pete's post before diving any
+further below.
+
+Todo: Keep this in the introduction?
+Given a mock from our designer, we immediately begin thinking about how we can
+translate the mock into Elm's Model-Update-View pattern.  Moreover, the steps outlined in Pete's blog post are almost the same as in Elm.
+We 1) Break the UI into a component heirachy; 2) Build a static version 3) Identify the minimal ( but complete ) representation of UI state;
+and finally 4) Figure out the actions necessary to update the state, and notify the affected components whenever the state is changed.
 
 ## Step 0: Model the data
 Our JSON API returns some data that looks like this:
@@ -26,6 +40,15 @@ In Elm, we model it like the code shown below, and we put it in a module call Mo
 We will import this module in our View module coming up in Step 2
 
 ```elm
+type alias Product =
+  { category : String
+  , price : String
+  , stocked : Bool
+  , name : String
+  }
+                 
+type alias Products = List Product
+
 newProduct : String -> String -> Bool -> String -> Products
 newProduct category price stocked name =
   { category = category
@@ -34,8 +57,8 @@ newProduct category price stocked name =
   , name = name
   }
 
-initialModel : Products
-initialModel =
+model : Products
+model =
   [ newProduct "Sporting Goods" "$49.99"  True  "Football"
   , newProduct "Sporting Goods" "$9.99"   True  "Baseball"
   , newProduct "Sporting Goods" "$29.99"  False "Basketball"
