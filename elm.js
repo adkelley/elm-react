@@ -4294,9 +4294,8 @@ Elm.Model.make = function (_elm) {
              ,stocked: c};
    });
    _elm.Model.values = {_op: _op
-                       ,Product: Product
-                       ,newProduct: newProduct
-                       ,model: model};
+                       ,model: model
+                       ,Product: Product};
    return _elm.Model.values;
 };
 Elm.Native.Array = {};
@@ -11927,6 +11926,206 @@ Elm.Native.VirtualDom.make = function(elm)
 
 },{}]},{},[23]);
 
+Elm.ProductDataTable = Elm.ProductDataTable || {};
+Elm.ProductDataTable.make = function (_elm) {
+   "use strict";
+   _elm.ProductDataTable = _elm.ProductDataTable || {};
+   if (_elm.ProductDataTable.values)
+   return _elm.ProductDataTable.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "ProductDataTable",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var productRow = function (product) {
+      return function () {
+         var stockedStyle = product.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                                   ,_0: "color"
+                                                                                   ,_1: "black"}])) : $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                                                                                                           ,_0: "color"
+                                                                                                                                           ,_1: "red"}]));
+         return A2($Html.tr,
+         _L.fromArray([]),
+         _L.fromArray([A2($Html.td,
+                      _L.fromArray([stockedStyle]),
+                      _L.fromArray([$Html.text(product.name)]))
+                      ,A2($Html.td,
+                      _L.fromArray([]),
+                      _L.fromArray([$Html.text(product.price)]))]));
+      }();
+   };
+   var productCategoryRow = function (category) {
+      return A2($Html.tr,
+      _L.fromArray([]),
+      _L.fromArray([A2($Html.th,
+      _L.fromArray([$Html$Attributes.align("left")
+                   ,$Html$Attributes.colspan(2)]),
+      _L.fromArray([$Html.text(category)]))]));
+   };
+   var productTable = F2(function (products,
+   state) {
+      return function () {
+         var rows = F3(function (lastCategory,
+         products$,
+         components) {
+            return function () {
+               var _v0 = $List.head(products$);
+               switch (_v0.ctor)
+               {case "Just":
+                  return !_U.eq(_v0._0.category,
+                    lastCategory) ? A3(rows,
+                    _v0._0.category,
+                    products$,
+                    A2($List._op["::"],
+                    productCategoryRow(_v0._0.category),
+                    components)) : $Basics.not(A2($String.contains,
+                    state.filterText,
+                    _v0._0.name)) || state.inStockOnly && $Basics.not(_v0._0.stocked) ? A3(rows,
+                    _v0._0.category,
+                    A2($List.drop,1,products$),
+                    components) : A3(rows,
+                    _v0._0.category,
+                    A2($List.drop,1,products$),
+                    A2($List._op["::"],
+                    productRow(_v0._0),
+                    components));}
+               return $List.reverse(components);
+            }();
+         });
+         return A2($Html.table,
+         _L.fromArray([]),
+         _L.fromArray([A2($Html.thead,
+                      _L.fromArray([]),
+                      _L.fromArray([A2($Html.tr,
+                      _L.fromArray([]),
+                      _L.fromArray([A2($Html.th,
+                                   _L.fromArray([$Html$Attributes.align("left")]),
+                                   _L.fromArray([$Html.text("Name")]))
+                                   ,A2($Html.th,
+                                   _L.fromArray([$Html$Attributes.align("left")]),
+                                   _L.fromArray([$Html.text("Price")]))]))]))
+                      ,A2($Html.tbody,
+                      _L.fromArray([]),
+                      A3(rows,
+                      "",
+                      products,
+                      _L.fromArray([])))]));
+      }();
+   });
+   var update = F2(function (action,
+   state) {
+      return function () {
+         switch (action.ctor)
+         {case "FilterText":
+            return _U.replace([["filterText"
+                               ,action._0]],
+              state);
+            case "InStockOnly":
+            return _U.replace([["inStockOnly"
+                               ,action._0]],
+              state);
+            case "NoOp": return state;}
+         _U.badCase($moduleName,
+         "between lines 34 and 43");
+      }();
+   });
+   var NoOp = {ctor: "NoOp"};
+   var inbox = $Signal.mailbox(NoOp);
+   var actions = inbox.signal;
+   var InStockOnly = function (a) {
+      return {ctor: "InStockOnly"
+             ,_0: a};
+   };
+   var FilterText = function (a) {
+      return {ctor: "FilterText"
+             ,_0: a};
+   };
+   var searchBar = F2(function (address,
+   state) {
+      return A2($Html.form,
+      _L.fromArray([]),
+      _L.fromArray([A2($Html.input,
+                   _L.fromArray([$Html$Attributes.type$("text")
+                                ,$Html$Attributes.value(state.filterText)
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                function ($) {
+                                   return $Signal.message(address)(FilterText($));
+                                })
+                                ,$Html$Attributes.placeholder("Search ...")]),
+                   _L.fromArray([]))
+                   ,A2($Html.p,
+                   _L.fromArray([]),
+                   _L.fromArray([A2($Html.input,
+                                _L.fromArray([$Html$Attributes.type$("checkbox")
+                                             ,$Html$Attributes.checked(state.inStockOnly)
+                                             ,A3($Html$Events.on,
+                                             "change",
+                                             $Html$Events.targetChecked,
+                                             function ($) {
+                                                return $Signal.message(address)(InStockOnly($));
+                                             })]),
+                                _L.fromArray([]))
+                                ,$Html.text("Only show products in stock")]))]));
+   });
+   var filterableProductTable = F3(function (address,
+   products,
+   state) {
+      return A2($Html.div,
+      _L.fromArray([$Html$Attributes.$class("FilterableProductTable")]),
+      _L.fromArray([A2(searchBar,
+                   address,
+                   state)
+                   ,A2(productTable,
+                   products,
+                   state)]));
+   });
+   var initialState = {_: {}
+                      ,filterText: ""
+                      ,inStockOnly: false};
+   var state = A3($Signal.foldp,
+   update,
+   initialState,
+   actions);
+   var main = A2($Signal.map,
+   A2(filterableProductTable,
+   inbox.address,
+   $Model.model),
+   state);
+   var State = F2(function (a,b) {
+      return {_: {}
+             ,filterText: b
+             ,inStockOnly: a};
+   });
+   _elm.ProductDataTable.values = {_op: _op
+                                  ,State: State
+                                  ,initialState: initialState
+                                  ,FilterText: FilterText
+                                  ,InStockOnly: InStockOnly
+                                  ,NoOp: NoOp
+                                  ,update: update
+                                  ,productCategoryRow: productCategoryRow
+                                  ,productRow: productRow
+                                  ,productTable: productTable
+                                  ,searchBar: searchBar
+                                  ,filterableProductTable: filterableProductTable
+                                  ,inbox: inbox
+                                  ,actions: actions
+                                  ,state: state
+                                  ,main: main};
+   return _elm.ProductDataTable.values;
+};
 Elm.Result = Elm.Result || {};
 Elm.Result.make = function (_elm) {
    "use strict";
@@ -12791,206 +12990,6 @@ Elm.Transform2D.make = function (_elm) {
                              ,scaleX: scaleX
                              ,scaleY: scaleY};
    return _elm.Transform2D.values;
-};
-Elm.View = Elm.View || {};
-Elm.View.make = function (_elm) {
-   "use strict";
-   _elm.View = _elm.View || {};
-   if (_elm.View.values)
-   return _elm.View.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "View",
-   $Basics = Elm.Basics.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Model = Elm.Model.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
-   var productRow = function (product) {
-      return function () {
-         var stockedStyle = product.stocked ? $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                                                   ,_0: "color"
-                                                                                   ,_1: "black"}])) : $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                                                                                                           ,_0: "color"
-                                                                                                                                           ,_1: "red"}]));
-         return A2($Html.tr,
-         _L.fromArray([]),
-         _L.fromArray([A2($Html.td,
-                      _L.fromArray([stockedStyle]),
-                      _L.fromArray([$Html.text(product.name)]))
-                      ,A2($Html.td,
-                      _L.fromArray([]),
-                      _L.fromArray([$Html.text(product.price)]))]));
-      }();
-   };
-   var productCategoryRow = function (category) {
-      return A2($Html.tr,
-      _L.fromArray([]),
-      _L.fromArray([A2($Html.th,
-      _L.fromArray([$Html$Attributes.align("left")
-                   ,$Html$Attributes.colspan(2)]),
-      _L.fromArray([$Html.text(category)]))]));
-   };
-   var productTable = F2(function (products,
-   state) {
-      return function () {
-         var rows = F3(function (lastCategory,
-         products$,
-         components) {
-            return function () {
-               var _v0 = $List.head(products$);
-               switch (_v0.ctor)
-               {case "Just":
-                  return !_U.eq(_v0._0.category,
-                    lastCategory) ? A3(rows,
-                    _v0._0.category,
-                    products$,
-                    A2($List._op["::"],
-                    productCategoryRow(_v0._0.category),
-                    components)) : $Basics.not(A2($String.contains,
-                    state.filterText,
-                    _v0._0.name)) || state.inStockOnly && $Basics.not(_v0._0.stocked) ? A3(rows,
-                    _v0._0.category,
-                    A2($List.drop,1,products$),
-                    components) : A3(rows,
-                    _v0._0.category,
-                    A2($List.drop,1,products$),
-                    A2($List._op["::"],
-                    productRow(_v0._0),
-                    components));}
-               return $List.reverse(components);
-            }();
-         });
-         return A2($Html.table,
-         _L.fromArray([]),
-         _L.fromArray([A2($Html.thead,
-                      _L.fromArray([]),
-                      _L.fromArray([A2($Html.tr,
-                      _L.fromArray([]),
-                      _L.fromArray([A2($Html.th,
-                                   _L.fromArray([$Html$Attributes.align("left")]),
-                                   _L.fromArray([$Html.text("Name")]))
-                                   ,A2($Html.th,
-                                   _L.fromArray([$Html$Attributes.align("left")]),
-                                   _L.fromArray([$Html.text("Price")]))]))]))
-                      ,A2($Html.tbody,
-                      _L.fromArray([]),
-                      A3(rows,
-                      "",
-                      products,
-                      _L.fromArray([])))]));
-      }();
-   });
-   var update = F2(function (action,
-   state) {
-      return function () {
-         switch (action.ctor)
-         {case "FilterText":
-            return _U.replace([["filterText"
-                               ,action._0]],
-              state);
-            case "InStockOnly":
-            return _U.replace([["inStockOnly"
-                               ,action._0]],
-              state);
-            case "NoOp": return state;}
-         _U.badCase($moduleName,
-         "between lines 34 and 43");
-      }();
-   });
-   var NoOp = {ctor: "NoOp"};
-   var inbox = $Signal.mailbox(NoOp);
-   var actions = inbox.signal;
-   var InStockOnly = function (a) {
-      return {ctor: "InStockOnly"
-             ,_0: a};
-   };
-   var FilterText = function (a) {
-      return {ctor: "FilterText"
-             ,_0: a};
-   };
-   var searchBar = F2(function (address,
-   state) {
-      return A2($Html.form,
-      _L.fromArray([]),
-      _L.fromArray([A2($Html.input,
-                   _L.fromArray([$Html$Attributes.type$("text")
-                                ,$Html$Attributes.value(state.filterText)
-                                ,A3($Html$Events.on,
-                                "input",
-                                $Html$Events.targetValue,
-                                function ($) {
-                                   return $Signal.message(address)(FilterText($));
-                                })
-                                ,$Html$Attributes.placeholder("Search ...")]),
-                   _L.fromArray([]))
-                   ,A2($Html.p,
-                   _L.fromArray([]),
-                   _L.fromArray([A2($Html.input,
-                                _L.fromArray([$Html$Attributes.type$("checkbox")
-                                             ,$Html$Attributes.checked(state.inStockOnly)
-                                             ,A3($Html$Events.on,
-                                             "change",
-                                             $Html$Events.targetChecked,
-                                             function ($) {
-                                                return $Signal.message(address)(InStockOnly($));
-                                             })]),
-                                _L.fromArray([]))
-                                ,$Html.text("Only show products in stock")]))]));
-   });
-   var filterableProductTable = F3(function (address,
-   products,
-   state) {
-      return A2($Html.div,
-      _L.fromArray([$Html$Attributes.$class("FilterableProductTable")]),
-      _L.fromArray([A2(searchBar,
-                   address,
-                   state)
-                   ,A2(productTable,
-                   products,
-                   state)]));
-   });
-   var initialState = {_: {}
-                      ,filterText: ""
-                      ,inStockOnly: false};
-   var state = A3($Signal.foldp,
-   update,
-   initialState,
-   actions);
-   var main = A2($Signal.map,
-   A2(filterableProductTable,
-   inbox.address,
-   $Model.model),
-   state);
-   var State = F2(function (a,b) {
-      return {_: {}
-             ,filterText: b
-             ,inStockOnly: a};
-   });
-   _elm.View.values = {_op: _op
-                      ,State: State
-                      ,initialState: initialState
-                      ,FilterText: FilterText
-                      ,InStockOnly: InStockOnly
-                      ,NoOp: NoOp
-                      ,update: update
-                      ,productCategoryRow: productCategoryRow
-                      ,productRow: productRow
-                      ,productTable: productTable
-                      ,searchBar: searchBar
-                      ,filterableProductTable: filterableProductTable
-                      ,inbox: inbox
-                      ,actions: actions
-                      ,state: state
-                      ,main: main};
-   return _elm.View.values;
 };
 Elm.VirtualDom = Elm.VirtualDom || {};
 Elm.VirtualDom.make = function (_elm) {

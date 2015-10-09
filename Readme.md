@@ -1,11 +1,18 @@
-# Tutorial: Thinking in Elm is similar to thinking in React
+# Tutorial: Thinking in Elm
 
-I'm going to take you through my process of creating a searchable product data table in Elm. My inspiration for this tutorial came from
-Pete Hunt's seminal blog post ['Thinking in React'](https://facebook.github.io/react/docs/thinking-in-react.html). In his post, he shows how the React
-framework makes you think about apps as you build them, and I believe the [Elm language](http://elm-lang.org/) shares this same characteristic.
-The end result is that both quietly guide you towards well architected code, but I believe Elm can take you there more easily.
+I'm going to take you through my thought process of creating a searchable product data table using the [Elm](http://elm-lang.org/) functional reactive programming language.
+My inspiration and outline for this tutorial came from Pete Hunt's blog post ['Thinking in React'](https://facebook.github.io/react/docs/thinking-in-react.html). 
+Pete shows how the React framework makes you think about apps as you build them, and what I found is that Elm shares this same characteristic.
+Moreover, as I was going through the steps that Pete outlines for creating the product table, I found that with few exceptions I can use the very same steps.
+So I'm going to take you through
 
-Besides helping you to write well architected code, there are further commonalities between React and Elm - 1) Like React Elm is intended to help developers build applications that use data that changes over time;  2) Data and state flow in one direction, from the parent down to the child componenents. 3) React and Elm both maintain a virtual DOM of their own, making them render super fast.
+In fact, both Elm and React share a lot more similarities than just helping you to write well architected code.
+Here's a few important ones that I've observed:
+1) Both are based on Functional-Reactive principles. However I would argue that in React FRP is a paradigm, whereas Elm is the real deal;
+2) They are intended to help build front end applications that use data that changes over time;
+3) Data is unidirectional, from the parent component down to the child componenent(s).
+4) Components are composable. In React they're considered classes, but in Elm they're actually pure functions.
+5) React and Elm both maintain a virtual DOM of their own, making them render super fast.
 
 But naturally, Elm is also very different than React.  Besides writing in a different language than Javascript and JSX, Elm is purely
 functional and therefore you must think and implement functionally in order to implement a UI. This isn't hard, especially if you haven't spent
@@ -69,7 +76,7 @@ model =
 ```
 
 ## Step 1: Break the UI into a component hierachy
-Following the same approach in the original blog post, we break down the
+If you read 'Thinkin in React' then you'll find the Following the same approach in the original blog post, we break down the
 mock into five components
 
 - FilterableProductTable
@@ -78,7 +85,7 @@ mock into five components
     - ProductCategoryRow
     - ProductRow
 
-## Step 2: Build the static version in React
+## Step 2: Build the static version in Elm
 Next we build a version that takes the data model and renders the UI but has no interactivity.  Please refer to View.elm for the source, but the the most tricking part of code below.  The challenge was to render a Product Catagory Row and a Product Row whenever we encountered a new product category.
 This is easily done imperatively because I simply mutate the lastCatagory variable.
 Go back and review the imperative implementation given in Pete's blog post.  It took awhile but it finally dawned on me that the best approach was to declare a recursive function that would only send the tail of the model when there was more of the same product categories in the list.  Whenever encountered a new category I would call the function without xx.  I also avoided xx

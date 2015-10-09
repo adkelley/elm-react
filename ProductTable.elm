@@ -1,6 +1,6 @@
-module View where
+module ProductDataTable where
 
-import Model exposing ( Products, Product, model)
+import Model exposing ( Product, Products, model )
 import Html exposing ( .. )
 import Html.Attributes exposing ( .. )
 import Html.Events exposing ( on, targetChecked, targetValue )
